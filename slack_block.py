@@ -43,10 +43,11 @@ class Slack(Block):
     version = VersionProperty('0.1.0')
     api_token = StringProperty(
         title='Slack API Token', default='[[SLACK_API_TOKEN]]')
-    channel = ExpressionProperty(title='Slack Channel', default='{{$channel}}',
-                                 attr_default=AttributeError)
+    channel = ExpressionProperty(
+        title='Slack Channel', default='{{ $channel }}',
+        attr_default=AttributeError)
     message = ExpressionProperty(
-        title='Message', default='{{$message}}', attr_default=AttributeError)
+        title='Message', default='{{ $message }}', attr_default=AttributeError)
 
     bot_info = ObjectProperty(BotInformation, title='Bot Details')
 

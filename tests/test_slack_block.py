@@ -81,3 +81,41 @@ class TestSlack(NIOBlockTestCase):
         blk.stop()
 
         self.assertEqual(mock.call_count, 0)
+
+    def test_no_channel(self):
+        """ Tests message is not sent if channel can't be found """
+        blk = Slack()
+        self.configure_block(blk, {
+            'message': '{{$message}}',
+            'channel': '{{$channel}}',
+            'api_token': 'FAKE TOKEN',
+            'bot_info': {}
+        })
+        mock = blk._slacker.chat.post_message = MagicMock()
+        blk.start()
+        blk.process_signals([Signal({
+            'message': 'This is my message',
+            'not_a_channel': 'This is my channel'
+        })])
+        blk.stop()
+
+        self.assertEqual(mock.call_count, 0)
+
+    def test_bad_expression(self):
+        """ Tests message is not sent if there is an invalid expression """
+        blk = Slack()
+        self.configure_block(blk, {
+            'message': '{{ message }}',  # this is a bad expression
+            'channel': '{{ $channel }}',
+            'api_token': 'FAKE TOKEN',
+            'bot_info': {}
+        })
+        mock = blk._slacker.chat.post_message = MagicMock()
+        blk.start()
+        blk.process_signals([Signal({
+            'message': 'This is my message',
+            'channel': 'This is my channel'
+        })])
+        blk.stop()
+
+        self.assertEqual(mock.call_count, 0)

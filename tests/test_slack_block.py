@@ -48,10 +48,10 @@ class TestSlack(NIOBlockTestCase):
             'channel': 'This is my channel'
         })])
         blk.stop()
-
         mock.assert_called_once_with(
             'This is my channel', 'This is my message',
             icon_emoji=':bot_emoji:', username='Bot Name')
+        self.assertEqual(1, len(self.last_notified['default']))
 
     def test_send_message_icon_url(self):
         """ Tests that messages get sent when a URL is supplied for an icon """
@@ -72,10 +72,28 @@ class TestSlack(NIOBlockTestCase):
             'channel': 'This is my channel'
         })])
         blk.stop()
-
         mock.assert_called_once_with(
             'This is my channel', 'This is my message',
             icon_url='http://ICONURL', username='Bot Name')
+        self.assertEqual(1, len(self.last_notified['default']))
+
+    def test_send_message_notified_signal(self):
+        """ Tests that signals are notified with response """
+        blk = Slack()
+        self.configure_block(blk, {
+            'message': 'message',
+            'channel': 'channel',
+        })
+        blk._slacker = MagicMock()
+        blk._send_message = MagicMock()
+        resp = {'raw': 'raw response', 'body': 'and a body'}
+        blk._send_message.return_value.__dict__ = resp
+        blk.start()
+        blk.process_signals([Signal({'i <3': 'n.io'})])
+        blk.stop()
+        self.assertEqual(1, len(self.last_notified['default']))
+        self.assertDictEqual(
+            self.last_notified['default'][0].to_dict(), resp)
 
     def test_no_message(self):
         """ Tests message is not sent if it can't be found on the signal """
@@ -93,8 +111,9 @@ class TestSlack(NIOBlockTestCase):
             'channel': 'This is my channel'
         })])
         blk.stop()
-
         self.assertEqual(mock.call_count, 0)
+        # No signals are notified if the Slack messages is not successful
+        self.assertEqual(0, len(self.last_notified['default']))
 
     def test_no_channel(self):
         """ Tests message is not sent if channel can't be found """
@@ -112,8 +131,9 @@ class TestSlack(NIOBlockTestCase):
             'not_a_channel': 'This is my channel'
         })])
         blk.stop()
-
         self.assertEqual(mock.call_count, 0)
+        # No signals are notified if the Slack messages is not successful
+        self.assertEqual(0, len(self.last_notified['default']))
 
     def test_bad_expression(self):
         """ Tests message is not sent if there is an invalid expression """
@@ -131,5 +151,6 @@ class TestSlack(NIOBlockTestCase):
             'channel': 'This is my channel'
         })])
         blk.stop()
-
         self.assertEqual(mock.call_count, 0)
+        # No signals are notified if the Slack messages is not successful
+        self.assertEqual(0, len(self.last_notified['default']))

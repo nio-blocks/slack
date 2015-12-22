@@ -1,10 +1,10 @@
 Slack
-===========
+=====
 
 Send messages to a [Slack](http://slack.com) channel as a bot
 
 Properties
---------------
+----------
  * Slack API Token - The API Token for your bot. Get a test token at the [Slack Web API page](https://api.slack.com/web).
  * Slack Channel - The channel to send your message to. You can use the channel name (prefixed with a hashtag) or you can use the channel ID returned from the API.
  * Message - The message to send to the channel.
@@ -14,17 +14,37 @@ Properties
 
 
 Dependencies
-----------------
+------------
  * [slacker](https://github.com/os/slacker)
 
 Commands
-----------------
+--------
 None
 
 Input
--------
+-----
 Any list of signals.
 
 Output
----------
-None
+------
+EnrichSignals mixin is used to pass through input signals and enrich them with the [response](https://api.slack.com/methods/chat.postMessage) from the Slack request.
+
+```python
+{
+  "successful": True,
+  "error": None,
+  "body": {
+    "ok": True,
+    "ts": "1405895017.000506",
+    "channel": "C024BE91L",
+    "message": {
+      "type": "message",
+      "username": "hansmosh",
+      "text": "i <3 n.io",
+      "ts": "1405895017.000506",
+        …
+    }
+  },
+  "raw": '{"ok":true,"chanel":"C024BE91L",...}'
+}
+```

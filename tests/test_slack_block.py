@@ -1,10 +1,18 @@
+from unittest import skipUnless
 from unittest.mock import MagicMock
 from collections import defaultdict
 from nio.common.signal.base import Signal
 from nio.util.support.block_test_case import NIOBlockTestCase
-from ..slack_block import Slack
 
 
+slacker_available = True
+try:
+    from ..slack_block import Slack
+except:
+    slacker_available = False
+
+
+@skipUnless(slacker_available, 'slacker is not available!!')
 class TestSlack(NIOBlockTestCase):
 
     def setUp(self):

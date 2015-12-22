@@ -7,9 +7,15 @@ from nio.util.support.block_test_case import NIOBlockTestCase
 
 slacker_available = True
 try:
-    from ..slack_block import Slack
+    from slacker import Slacker
 except:
     slacker_available = False
+
+try:
+    from ..slack_block import Slack
+except:
+    # Allow tests to fail if the block cannot be imported
+    pass
 
 
 @skipUnless(slacker_available, 'slacker is not available!!')

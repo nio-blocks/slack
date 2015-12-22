@@ -1,9 +1,9 @@
 from slacker import Slacker
-
 from nio.common.block.base import Block
 from nio.common.discovery import Discoverable, DiscoverableType
 from nio.metadata.properties import VersionProperty, StringProperty, \
     ExpressionProperty, ObjectProperty, PropertyHolder
+from .mixins.enrich.enrich_signals import EnrichSignals
 
 
 class BotInformation(PropertyHolder):
@@ -36,11 +36,11 @@ class BotInformation(PropertyHolder):
 
 
 @Discoverable(DiscoverableType.block)
-class Slack(Block):
+class Slack(EnrichSignals, Block):
 
     """ Send messages to a slack channel as a bot """
 
-    version = VersionProperty('0.1.0')
+    version = VersionProperty('0.2.0')
     api_token = StringProperty(
         title='Slack API Token', default='[[SLACK_API_TOKEN]]')
     channel = ExpressionProperty(
@@ -60,15 +60,20 @@ class Slack(Block):
         self._slacker = Slacker(self.api_token)
 
     def process_signals(self, signals, input_id='default'):
+        signals_to_notify = []
         for signal in signals:
             try:
-                self._send_message(
+                resp = self._send_message(
                     self.channel(signal),
                     self.message(signal),
                     **self.bot_info.get_bot_details(signal))
+                signals_to_notify.append(
+                    self.get_output_signal(resp.__dict__, signal))
             except:
                 self._logger.exception("Unable to send message for signal {}"
                                        .format(signal))
+        if signals_to_notify:
+            self.notify_signals(signals_to_notify)
 
     def _send_message(self, to_channel, message, **kwargs):
         """ Send a message to a Slack channel
@@ -79,8 +84,7 @@ class Slack(Block):
         """
         self._logger.debug("Sending message {} to channel {}".format(
             message, to_channel))
-
         resp = self._slacker.chat.post_message(to_channel, message, **kwargs)
-
         if resp.body.get('ok'):
             self._logger.debug("Message {} sent successfully".format(message))
+        return resp

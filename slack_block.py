@@ -59,6 +59,7 @@ class Slack(EnrichSignals, Block):
         signals_to_notify = []
         for signal in signals:
             try:
+                self._validate_channel(self.channel(signal))
                 resp = self._send_message(
                     self.channel(signal),
                     self.message(signal),
@@ -84,3 +85,11 @@ class Slack(EnrichSignals, Block):
         if resp.body.get('ok'):
             self.logger.debug("Message {} sent successfully".format(message))
         return resp
+
+    def _validate_channel(self, channel):
+        """ Log a warning if channel syntax looks off. """
+        if not channel.startswith('#') or channel.startswith('@'):
+            self.logger.warning(
+                "Channel '{}' may be invalid. "
+                "Channel names should start with '#' and "
+                "Direct Messages should start with '@'.".format(channel))

@@ -58,8 +58,16 @@ class Slack(EnrichSignals, Block):
     def process_signals(self, signals, input_id='default'):
         signals_to_notify = []
         for signal in signals:
+            # If the channel name is potentially invalid, attempt to send the
+            # message anyways. If no channel or DM identifier is specified, the
+            # subject is assumed to be a channel.
             try:
-                self._validate_channel(self.channel(signal))
+                if not self._valid_channel_name(self.channel(signal)):
+                    self.logger.warning(
+                        "Channel '{}' may be invalid. "
+                        "Channel names should start with '#' and "
+                        "Direct Messages should start with '@'.".format(
+                                                         self.channel(signal)))
                 resp = self._send_message(
                     self.channel(signal),
                     self.message(signal),
@@ -86,10 +94,7 @@ class Slack(EnrichSignals, Block):
             self.logger.debug("Message {} sent successfully".format(message))
         return resp
 
-    def _validate_channel(self, channel):
-        """ Log a warning if channel syntax looks off. """
-        if not channel.startswith('#') or channel.startswith('@'):
-            self.logger.warning(
-                "Channel '{}' may be invalid. "
-                "Channel names should start with '#' and "
-                "Direct Messages should start with '@'.".format(channel))
+    def _valid_channel_name(self, channel):
+        """ Determine if channel syntax looks off. """
+        return channel.startswith('#') or channel.startswith('@')
+

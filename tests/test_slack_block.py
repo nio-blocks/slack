@@ -147,3 +147,19 @@ class TestSlack(NIOBlockTestCase):
         self.assertEqual(mock.call_count, 0)
         # No signals are notified if the Slack messages is not successful
         self.assertEqual(0, len(self.last_notified[DEFAULT_TERMINAL]))
+
+    def test_invalid_channel(self):
+        """ Tests that a channel with a potentially malformed name will
+            gets flagged. """
+
+        # Instantiate the slack block.
+        blk = Slack()
+
+        # Option 1: The channel does not begin with "#" or "@".
+        self.assertFalse(blk._valid_channel_name("I_dont_start_with_@_or_#"))
+
+        # Option 2: The channel begins with "#" (a slack channel).
+        self.assertTrue(blk._valid_channel_name("#Im_a_slack_channel"))
+
+        # Option 3: The channel begins with "@" (a slack direct message).
+        self.assertTrue(blk._valid_channel_name("@Im_a_user_handle"))

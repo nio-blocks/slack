@@ -1,37 +1,10 @@
 {
-    "nio/Slack": {
-        "Output": {
-            "Description": "EnrichSignals mixin is used to pass through input signals and enrich them with the [response](https://api.slack.com/methods/chat.postMessage) from the Slack request.\n```python\n{\n\"successful\": True,\n\"error\": None,\n\"body\": {\n\"ok\": True,\n\"ts\": \"1405895017.000506\",\n\"channel\": \"C024BE91L\",\n\"message\": {\n\"type\": \"message\",\n\"username\": \"hansmosh\",\n\"text\": \"i <3 n.io\",\n\"ts\": \"1405895017.000506\",\n\u2026\n}\n},\n\"raw\": '{\"ok\":true,\"chanel\":\"C024BE91L\",...}'\n}\n```"
-        },
-        "Category": "WebService",
-        "Properties": {
-            "Icon": {
-                "http": "//www.emoji-cheat-sheet.com/",
-                "description": "The icon for the bot. This can either be a URL to an image or an emoji code. Emoji codes should start and end with a `:`. For example, `:smiley_cat:`. For a list of emoji codes see the [Emoji Cheat Sheet]"
-            },
-            "Name": {
-                "description": "How the name should appear"
-            },
-            "* Slack Channel": {
-                "prefixed": "with",
-                "description": "The channel to send your message to. You can use the channel name  or you can use the channel ID returned from the API. Direct messages are supported as well (prefixed with @)."
-            },
-            "* Message": {
-                "description": "The message to send to the channel."
-            },
-            "* Bot Info": {
-                "description": "Information about the bot that will be sending the message"
-            },
-            "* Slack API Token": {
-                "https": "//api.slack.com/web",
-                "description": "The API Token for your bot. Get a test token at the [Slack Web API page]."
-            }
-        },
-        "Commands": {},
-        "Input": {
-            "Description": "Any list of signals."
-        },
-        "Version": "1.0.0",
-        "Description": "Send messages to a [Slack](http://slack.com) channel as a bot"
-    }
+  "nio/Slack": {
+    "version": "0.0.1",
+    "description": "",
+    "inputs": {},
+    "outputs": {},
+    "properties": {},
+    "commands": {}
+  }
 }

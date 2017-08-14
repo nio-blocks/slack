@@ -1,34 +1,33 @@
 Slack
 =====
-
-Send messages to a [Slack](http://slack.com) channel as a bot
+Send messages to a Slack channel as a bot.
 
 Properties
 ----------
- * Slack API Token: The API Token for your bot. Get a test token at the [Slack Web API page](https://api.slack.com/web).
- * Slack Channel: The channel to send your message to. You can use the channel name (prefixed with a hashtag) or you can use the channel ID returned from the API. Direct messages are supported as well (prefixed with @).
- * Message: The message to send to the channel.
- * Bot Info: Information about the bot that will be sending the message
- * Bot Info - Name: How the name should appear
- * Bot Info - Icon: The icon for the bot. This can either be a URL to an image or an emoji code. Emoji codes should start and end with a `:`. For example, `:smiley_cat:`. For a list of emoji codes see the [Emoji Cheat Sheet](http://www.emoji-cheat-sheet.com/)
+- **api_token**: The API Token for your bot. Get a test token at the Slack Web API page.
+- **bot_info**: Information about the bot that will be sending the message.
+- **channel**: The channel to send your message to. You can use the channel name (prefixed with a hashtag) or you can use the channel ID returned from the API. Direct messages are supported as well (prefixed with @).
+- **enrich**: If true, the original incoming signal will be included in the output signal.
+- **message**: The message to send to the channel.
 
+Inputs
+------
+- **default**: Any list of signals.
+
+Outputs
+-------
+- **default**: The response of the slack request.
+
+Commands
+--------
 
 Dependencies
 ------------
  * [slacker](https://github.com/os/slacker)
 
-Commands
---------
-None
-
-Input
------
-Any list of signals.
-
-Output
-------
+Output Example
+--------------
 EnrichSignals mixin is used to pass through input signals and enrich them with the [response](https://api.slack.com/methods/chat.postMessage) from the Slack request.
-
 ```python
 {
   "successful": True,
@@ -48,3 +47,4 @@ EnrichSignals mixin is used to pass through input signals and enrich them with t
   "raw": '{"ok":true,"chanel":"C024BE91L",...}'
 }
 ```
+

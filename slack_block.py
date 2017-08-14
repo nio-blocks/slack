@@ -1,4 +1,5 @@
 from slacker import Slacker
+
 from nio.block.base import Block
 from nio.util.discovery import discoverable
 from nio.properties import VersionProperty, StringProperty, \
@@ -75,8 +76,8 @@ class Slack(EnrichSignals, Block):
                 signals_to_notify.append(
                     self.get_output_signal(resp.__dict__, signal))
             except:
-                self.logger.exception("Unable to send message for signal {}"
-                                       .format(signal))
+                self.logger.exception(
+                    "Unable to send message for signal {}".format(signal))
         if signals_to_notify:
             self.notify_signals(signals_to_notify)
 
@@ -97,4 +98,3 @@ class Slack(EnrichSignals, Block):
     def _valid_channel_name(self, channel):
         """ Determine if channel syntax looks off. """
         return channel.startswith('#') or channel.startswith('@')
-

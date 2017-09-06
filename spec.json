@@ -2,6 +2,9 @@
   "nio/Slack": {
     "version": "0.1.0",
     "description": "Send messages to a Slack channel as a bot.",
+    "categories": [
+      "Notifications"
+    ],
     "properties": {
       "api_token": {
         "title": "Slack API Token",

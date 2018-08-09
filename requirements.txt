@@ -1,1 +1,1 @@
-slacker
+slacker~=0.9

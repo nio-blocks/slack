@@ -4,7 +4,7 @@ Send messages to a Slack channel as a bot.
 
 Properties
 ----------
-- **api_token**: The API Token for your bot. Get a test token at the Slack Web API page.
+- **api_token**: The API Token for your bot. See [Legacy Tokens](https://api.slack.com/custom-integrations/legacy-tokens)
 - **bot_info**: Information about the bot that will be sending the message.
 - **channel**: The channel to send your message to. You can use the channel name (prefixed with a hashtag) or you can use the channel ID returned from the API. Direct messages are supported as well (prefixed with @).
 - **enrich**: If true, the original incoming signal will be included in the output signal.
